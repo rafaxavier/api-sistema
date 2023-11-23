@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreSalonRequest as RequestsStoreSalonRequest;
 use App\Models\Salon;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class SalonController extends Controller
 {
@@ -44,7 +47,7 @@ class SalonController extends Controller
                 'zip_code' => $request->zip_code
             ]);
 
-            User::create([
+            $user = User::create([
                 'name' => 'admin',
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
@@ -53,6 +56,14 @@ class SalonController extends Controller
             ]);
 
             DB::commit();
+
+            event(new Registered($user));
+
+            Auth::login($user);
+            $user_logged = Auth::user();
+            $token = $request->user()->createToken($user_logged->id .'_id_user', ['*'], Carbon::now()->addDays(1));
+
+            return response()->json(['success' => true, 'message' => 'Usuário registrado com sucesso', 'user' => $user_logged, 'token' => $token->plainTextToken], 200);
         } catch (\Exception $e) {
             DB::rollback();
             return response()->json(['error' => $e->getMessage()], 500);
