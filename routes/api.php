@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SalonController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/verified{verified}', function ($parametro) {
     return view('verified', ['parametro' => $parametro]);
 })->name('verified');
+
+Route::post('/register-salon', [SalonController::class, 'store'])
+    ->middleware('guest')
+    ->name('register-salon');
 
 Route::get('/', function () {
     return ['Laravel' => app()->version()];
