@@ -28,8 +28,9 @@ class RegisteredUserController extends Controller
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
-                'access_type' => ['required', 'string'],
-            ]);
+                'access_type' => ['required','in:admin,professional,reception'],
+                'salon_id' => ['required','numeric'],
+            ],['access_type.in' => 'O campo access_type deve ser um dos seguintes valores: admin, professional, reception.']);
         } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
         }
@@ -39,7 +40,8 @@ class RegisteredUserController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'access_type' => $request->access_type
+                'access_type' => $request->access_type,
+                'salon_id' => $request->salon_id
             ]);
 
             event(new Registered($user));
