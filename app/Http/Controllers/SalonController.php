@@ -7,6 +7,7 @@ use App\Models\Salon;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class SalonController extends Controller
 {
@@ -46,7 +47,7 @@ class SalonController extends Controller
             User::create([
                 'name' => 'admin',
                 'email' => $request->email,
-                'password' => $request->password,
+                'password' => Hash::make($request->password),
                 'access_type' => $request->input('access_type', 'admin'),
                 'salon_id' => $newSalon->id
             ]);
