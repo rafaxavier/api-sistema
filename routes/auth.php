@@ -26,7 +26,8 @@ Route::post('/reset-password', [NewPasswordController::class, 'store'])
 
 //??? decidir se resposta vai ser em json ou redirect
 Route::get('/verify-email/{id}/{hash}', VerifyEmailController::class)
-    ->middleware(['signed', 'throttle:6,1'])
+    // ->middleware(['auth:sanctum','signed', 'throttle:6,1']) //validar email c/ logado => necessita a passagem do token 
+    ->middleware(['signed', 'throttle:6,1']) // validar email  deslogado, so valida hash e idUser e se email ja foi verificado ou nao, se nao verifica
     ->name('verification.verify');
 
 Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
