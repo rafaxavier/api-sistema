@@ -13,15 +13,17 @@ class ResetPasswordNotification extends Notification
     use Queueable;
     public $token;
     public $name;
+    public $email;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($token, $name)
+    public function __construct($token, $name, $email)
     {
         $this->token = $token;
         $this->name = $name;
+        $this->email = $email;
     }
 
     /**
@@ -43,7 +45,7 @@ class ResetPasswordNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $url = 'http://localhost:8000/reset/password/' . $this->token;
+        $url = 'http://localhost:8000/api/reset/password/' . $this->token.'?email='.$this->email;
         $minutos = config('auth.passwords.' . config('auth.defaults.passwords') . '.expire');
 
         return (new MailMessage)
