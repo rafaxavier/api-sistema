@@ -69,7 +69,6 @@
 
                             <div class="card-body">
                                 <form method="POST" action="{{ route('password.store') }}">
-                                    <!-- @csrf -->
 
                                     <input type="hidden" name="token" value="{{ $token }}">
 
@@ -95,9 +94,26 @@
                                         </div>
                                     </div>
 
+                                    @if(isset($message['validation']))
+                                        <div class="alert alert-danger mt-3">
+                                            {{ $message['validation'] }}
+                                        </div>
+                                    @endif
+
+                                    @if(isset($message['token']))
+                                        <div class="alert alert-danger mt-3">
+                                            {{ $message['token'] }}, click aqui para <a href="#" >recuperar</a> a senha ou faça <a href="#" >login</a>
+                                        </div>
+                                    @endif
+
+                                    @if(isset($message['success']))
+                                        <div class="alert alert-success mt-3" role="alert">
+                                            {{ $message['success'] }} :) , click aqui para <a href="#" >logar</a>
+                                        </div>
+                                    @endif
                                     <div class="form-group mt-4">
                                         <div class="col-md-12 offset-md-12">
-                                            <button type="submit" class="btn btn-primary col-md-12">
+                                            <button type="submit" class="btn btn-primary btn-lg  col-md-12">
                                                 {{ __('Confirme') }}
                                             </button>
                                         </div>

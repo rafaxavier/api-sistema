@@ -4,15 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
-use Illuminate\Validation\ValidationException;
 
 class NewPasswordController extends Controller
 {
@@ -21,7 +18,7 @@ class NewPasswordController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'token' => ['required'],
@@ -29,18 +26,14 @@ class NewPasswordController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        // if ($validator->fails()) {
-        //     return response()->json(['errors' => $validator->errors()], 422);
-        // }
-        // dd($validator->errors());
         if ($validator->fails()) {
-            return redirect()->route('reset-password', ['token' => $request->token, 'email' => $request->email, 'msg'=>'okkkkkkk'])
-                ->withErrors('erro',$validator->errors());
+            return view('reset-password')
+                ->with('token', $request->token)
+                ->with('email', $request->email)
+                ->with('message', ['validation' => $validator->errors()->first()])
+                ;
         }
-
-
-
-
+        
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user) use ($request) {
@@ -53,6 +46,24 @@ class NewPasswordController extends Controller
             }
         );
 
+        if($status === 'passwords.token'){
+            return view('reset-password')
+                ->with('token', $request->token)
+                ->with('email', $request->email)
+                ->with('message', ['token' => 'Token expirado']);
+        }
+
+        return view('reset-password')
+                ->with('token', $request->token)
+                ->with('email', $request->email)
+                ->with('message', ['success' => 'Senha alterada com sucesso']);
+        
         return response()->json(['message' => __($status)]);
+    }
+
+    public function show($token, Request $request)
+    {
+        $email = $request->query('email');
+        return view('reset-password', ['token' => $token, 'email' => $email,'message'=>'']);
     }
 }
