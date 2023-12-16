@@ -13,7 +13,7 @@
     <script src="https://kit.fontawesome.com/9cc50a0661.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <style>
-        body {
+         body {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -33,7 +33,7 @@
             /* para garantir que a barra de navegação esteja acima de outros elementos */
         }
 
-        .container-main {
+         .container-main {
             flex: 1;
             display: flex;
             justify-content: center;
@@ -71,7 +71,13 @@
                                 @elseif ($parametro == 1)
                                 <p>Seu Email já foi verificado!</p>
                                 @endif
-                                <a class="btn btn-primary btn-sm" role="button">{{ __('Clique aqui para Logar') }}</a>
+                                <div class="form-group mt-4">
+                                    <div class="col-md-12 offset-md-12">
+                                        <button type="submit" class="btn btn-primary btn-md col-md-12">
+                                        Clique aqui para Logar
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -69,7 +69,6 @@
 
                             <div class="card-body">
                                 <form method="POST" action="{{ route('password.store') }}">
-
                                     <input type="hidden" name="token" value="{{ $token }}">
 
                                     <div class="form-group">
@@ -113,7 +112,7 @@
                                     @endif
                                     <div class="form-group mt-4">
                                         <div class="col-md-12 offset-md-12">
-                                            <button type="submit" class="btn btn-primary btn-lg  col-md-12">
+                                            <button type="submit" class="btn btn-primary btn-md  col-md-12">
                                                 {{ __('Confirme') }}
                                             </button>
                                         </div>
