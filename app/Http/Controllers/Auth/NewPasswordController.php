@@ -30,8 +30,7 @@ class NewPasswordController extends Controller
             return view('reset-password')
                 ->with('token', $request->token)
                 ->with('email', $request->email)
-                ->with('message', ['validation' => $validator->errors()->first()])
-                ;
+                ->with('message', ['validation' => $validator->errors()->first()]);
         }
         
         $status = Password::reset(
@@ -56,14 +55,15 @@ class NewPasswordController extends Controller
         return view('reset-password')
                 ->with('token', $request->token)
                 ->with('email', $request->email)
-                ->with('message', ['success' => 'Senha alterada com sucesso']);
+                ->with('message', ['success' => 'Senha alterada com sucesso.']);
         
         return response()->json(['message' => __($status)]);
     }
 
-    public function show($token, Request $request)
+    public function show(Request $request)
     {
         $email = $request->query('email');
+        $token = $request->query('token');
         return view('reset-password', ['token' => $token, 'email' => $email,'message'=>'']);
     }
 }

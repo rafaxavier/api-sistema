@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
@@ -16,7 +15,7 @@ class PasswordResetLinkController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request)
     {
         $request->validate([
             'email' => ['required', 'email'],
@@ -25,10 +24,13 @@ class PasswordResetLinkController extends Controller
         // Verifica se o e-mail existe no banco de dados antes de enviar o link de redefinição
         $user = User::where('email', $request->email)->first();
         if (!$user) {
-            return response()->json(['success' => false, 'message' => 'E-mail não encontrado no sistema.'], 404);
+            return view('reset-password')
+            ->with('token', $request->token)
+            ->with('email', $request->email)
+            ->with('message', ['validation' => 'E-mail não encontrado no sistema.']);
         }
 
-        //envip do link de redefinição de senha
+        //envio do link de redefinição de senha
         $status = Password::sendResetLink(
             $request->only('email')
         );
@@ -39,6 +41,9 @@ class PasswordResetLinkController extends Controller
             ]);
         }
 
-        return response()->json(['success' => true, 'message' => __($status)]);
+        return view('reset-password')
+            ->with('token', $request->token)
+            ->with('email', $request->email)
+            ->with('message', ['success' => 'E-mail de redefinição de senha reenviado, confira também na caixa de span.']);
     }
 }

@@ -99,17 +99,12 @@
                                         </div>
                                     @endif
 
-                                    @if(isset($message['token']))
-                                        <div class="alert alert-danger mt-3">
-                                            {{ $message['token'] }}, click aqui para <a href="#" >recuperar</a> a senha ou faça <a href="#" >login</a>
+                                    @if(isset($message['success']))
+                                        <div class="alert alert-success mt-3" role="alert">
+                                            {{ $message['success'] }}. <br><a href="#" >Click aqui para logar</a>
                                         </div>
                                     @endif
 
-                                    @if(isset($message['success']))
-                                        <div class="alert alert-success mt-3" role="alert">
-                                            {{ $message['success'] }} :) , click aqui para <a href="#" >logar</a>
-                                        </div>
-                                    @endif
                                     <div class="form-group mt-4">
                                         <div class="col-md-12 offset-md-12">
                                             <button type="submit" class="btn btn-primary btn-md  col-md-12">
@@ -118,6 +113,19 @@
                                         </div>
                                     </div>
                                 </form>
+
+                                @if(isset($message['token']))
+                                <form id="resend-email" method="POST" action="{{ route('password.email') }}">
+                                    @csrf
+                                    <input type="hidden" name="email" value="{{ $email }}">
+                                    <div class="alert alert-danger mt-3">
+                                        {{ $message['token'] }}, reenvie o e-mail para
+                                        <button class="btn btn-link" type="submit" id="btn-resend-email">recuperar</button> a senha 
+                                        ou faça <a href="#">login</a>
+                                    </div>
+                                </form>
+                                @endif
+
                             </div>
                         </div>
                     </div>
