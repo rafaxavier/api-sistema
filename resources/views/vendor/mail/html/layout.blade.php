@@ -42,19 +42,9 @@
                                 <tr>
                                     <td class="content-cell">
                                         {{ Illuminate\Mail\Markdown::parse($slot) }}
-                                        <hr>
-                                        <p style="font-size:small">
-                                            {!! trans('messages.reset_password_instruction') !!}
-                                            @isset($subcopy)
-                                            <?php
-                                            $html = new \Illuminate\Support\HtmlString($subcopy);
-                                            $start = \Illuminate\Support\Str::after($html, '<a href="');
-                                            $end = \Illuminate\Support\Str::after($start, '"<');
-                                            $url = \Illuminate\Support\Str::before($end, '">');
-                                            ?>
-                                            <a href="{{ $url }}" target="_blank">{{ $url }}</a>
-                                            @endisset
-                                        </p>
+
+                                        {{ $subcopy ?? '' }}
+                                       
                                     </td>
                                 </tr>
                             </table>
