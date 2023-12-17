@@ -14,64 +14,24 @@ use Illuminate\Support\Facades\Auth;
 
 class VerifyEmailController extends Controller
 {
-    //****** */ modo redirect
-    // se quiser que usuário esteja autenticado p/ verificar o email
-    // public function __invoke(EmailVerificationRequest $request): RedirectResponse
-
-    // se nao quiser que usuario esteja autenticado p/ verificar o email
     public function __invoke(Request $request): RedirectResponse
     {
         $user = $request->route('id') ? User::find($request->route('id')) : null;
 
         if (!$user || $user->hasVerifiedEmail()) {
-            return redirect()->route('verified', ['verified' => 1]);
+            return redirect()->route('verification.show', ['verified' => 1]);
         }
 
         if ($user->markEmailAsVerified()) {
             event(new Verified($user));
         }
 
-        return redirect()->route('verified', ['verified' => 0]);
+        return redirect()->route('verification.show', ['verified' => 0]);
     }
 
-
-    //******** */ modo json
-    // public function __invoke(EmailVerificationRequest $request): JsonResponse
-    // {
-    //     $user = $request->route('id') ? User::find($request->route('id')) : null;
-
-    //     if (!$user || $user->hasVerifiedEmail()) {
-    //         return response()->json(['message' => 'Email already verified', 'user' => $user], 200);
-    //     }
-
-    //     if ($user->markEmailAsVerified()) {
-    //         event(new Verified($user));
-    //     }
-
-    //     return response()->json(['message' => 'Email verified successfully', 'user' => $user], 200);
-    // }
-
-
-    //******* */ original redirect pro front ??
-    /**
-     * Mark the authenticated user's email address as verified.
-     */
-    // public function __invoke(EmailVerificationRequest $request): RedirectResponse
-    // {       
-    //     dd($request);
-    //     if ($request->user()->hasVerifiedEmail()) {
-    //         dd($request);
-    //         return redirect()->intended(
-    //             config('app.frontend_url').RouteServiceProvider::HOME.'?verified=1'
-    //         );
-    //     }
-
-    //     if ($request->user()->markEmailAsVerified()) {
-    //         event(new Verified($request->user()));
-    //     }
-
-    //     return redirect()->intended(
-    //         config('app.frontend_url').RouteServiceProvider::HOME.'?verified=1'
-    //     );
-    // }
+    public function show(Request $request)
+    {   
+        $verified = $request->query('verified');
+        return view('verified', ['parametro' => $verified]);
+    }
 }
