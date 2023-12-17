@@ -15,25 +15,38 @@ Route::post('/register', [RegisteredUserController::class, 'store'])
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])
     ->middleware('guest')
     ->name('login');
-    
-Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
-    ->middleware('guest')
-    ->name('password.email');
-    
-Route::post('/reset-password', [NewPasswordController::class, 'store'])
-    ->middleware('guest')
-    ->name('password.store');
-
-//??? decidir se resposta vai ser em json ou redirect
-Route::get('/verify-email/{id}/{hash}', VerifyEmailController::class)
-    // ->middleware(['auth:sanctum','signed', 'throttle:6,1']) //validar email c/ logado => necessita a passagem do token 
-    ->middleware(['signed', 'throttle:6,1']) // validar email  deslogado, so valida hash e idUser e se email ja foi verificado ou nao, se nao verifica
-    ->name('verification.verify');
-
-Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
-    ->middleware(['auth:sanctum', 'throttle:6,1'])
-    ->name('verification.send');
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->middleware('auth:sanctum')
     ->name('logout');
+
+
+/****** reset de senha */
+// exibe tela de redefinicao de senha
+Route::get('/forgot-password', [NewPasswordController::class, 'show'])->name('password.reset');
+
+// reenvia o email de redefinicao de senha
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+    ->middleware('guest')
+    ->name('password.email');
+
+// altera a senha atual
+Route::post('/reset-password', [NewPasswordController::class, 'store'])
+    ->middleware('guest')
+    ->name('password.store');
+
+
+/****** verificacao de email */
+// exibe tela de verificacao de email(feedBack)
+Route::get('/verified', [VerifyEmailController::class, 'show'])->name('verification.show');
+
+// valida email
+Route::get('/verify-email/{id}/{hash}', VerifyEmailController::class)
+    ->middleware(['signed', 'throttle:6,1'])
+    ->name('verification.verify');
+
+// reenvio de email para verificacao
+Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+    ->middleware(['auth:sanctum', 'throttle:6,1'])
+    ->name('verification.send');
+
