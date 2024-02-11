@@ -110,8 +110,18 @@ class SalonController extends Controller
      * @param  \App\Models\Salon  $salon
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Salon $salon)
+    public function destroy($id)
     {
-        //
+        try {
+            $salon = Salon::find($id);
+            if ($salon) {
+                $salon->delete();
+                return response()->json(['success' => true, 'message' => 'Salão deletado com sucesso', 'salon' => $salon], 200);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Salão não existe'], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 }
