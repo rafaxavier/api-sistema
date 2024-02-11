@@ -37,8 +37,17 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
-        return ['user' => $user];
+        try {
+            $user = User::find($id);
+            
+            if ($user) {
+                return ['user' => $user];
+            } else {
+                return response()->json(['success' => false, 'message' => 'Usuário não existe'], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     /**
