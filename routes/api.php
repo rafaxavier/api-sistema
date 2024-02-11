@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SalonController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +24,11 @@ Route::get('/', function () {
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::apiResources([
+    'user' => UserController::class,
+    'salon' => SalonController::class,
+]);
 
 Route::post('/register-salon', [SalonController::class, 'store'])
     ->middleware('guest')
