@@ -21,7 +21,8 @@ class SalonController extends Controller
      */
     public function index()
     {
-        //
+        $salons = Salon::all();
+        return ['salons'=>$salons];
     }
 
     /**
@@ -76,20 +77,19 @@ class SalonController extends Controller
      * @param  \App\Models\Salon  $salon
      * @return \Illuminate\Http\Response
      */
-    public function show(Salon $salon)
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Salon  $salon
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Salon $salon)
-    {
-        //
+        try {
+            $salon = Salon::find($id);
+            
+            if ($salon) {
+                return ['salon' => $salon];
+            } else {
+                return response()->json(['success' => false, 'message' => 'Salão não existe'], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     /**
