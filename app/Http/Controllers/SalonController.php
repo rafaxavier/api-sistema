@@ -22,7 +22,7 @@ class SalonController extends Controller
     public function index()
     {
         $salons = Salon::all();
-        return ['salons'=>$salons];
+        return ['salons' => $salons];
     }
 
     /**
@@ -62,7 +62,7 @@ class SalonController extends Controller
 
             Auth::login($user);
             $user_logged = Auth::user();
-            $token = $request->user()->createToken($user_logged->id .'_id_user', ['*'], Carbon::now()->addDays(1));
+            $token = $request->user()->createToken($user_logged->id . '_id_user', ['*'], Carbon::now()->addDays(1));
 
             return response()->json(['success' => true, 'message' => 'Usuário registrado com sucesso', 'user' => $user_logged, 'token' => $token->plainTextToken], 200);
         } catch (\Exception $e) {
@@ -81,7 +81,7 @@ class SalonController extends Controller
     {
         try {
             $salon = Salon::find($id);
-            
+
             if ($salon) {
                 return ['salon' => $salon];
             } else {
@@ -99,9 +99,20 @@ class SalonController extends Controller
      * @param  \App\Models\Salon  $salon
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, salon $salon)
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            $salon = Salon::find($id);
+
+            if ($salon) {
+                $salon->update($request->all());
+                return response()->json(['success' => true, 'message' => 'Salão atualizado com sucesso', 'salon' => $salon], 200);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Salão não existe'], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     /**
