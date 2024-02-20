@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {   
         Schema::table('salons', function (Blueprint $table) {
-            $table->string('cnpj',18)->nullable()->after('name');
-            $table->string('cpf',14)->nullable()->after('cnpj');
+            $table->string('cnpj',18)->unique()->nullable()->after('name');
+            $table->string('cpf',14)->unique()->nullable()->after('cnpj');
         });
     }
 
