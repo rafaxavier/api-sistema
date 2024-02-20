@@ -10,6 +10,8 @@ class StoreSalonRequest  extends FormRequest
     {
         return [
             'name' => 'required|max:50',
+            'cnpj' => 'unique:salons|max:18',
+            'cpf' => 'unique:salons|max:14',
             'description' => 'nullable|max:200',
             'email' => 'required|email|max:50|unique:users',
             'phone' => 'required|regex:/^\(\d{2}\)\d{4,5}\-\d{4}$/',
@@ -29,6 +31,8 @@ class StoreSalonRequest  extends FormRequest
     {
         return [
             'required' => 'campo :attribute é obrigatório',
+            'cnpj.unique'=>'Este CNPJ já esta sendo utilizado.',
+            'cpf.unique'=>'Este CPF já esta sendo utilizado.',
             'email.unique'=>'Este email já esta sendo utilizado.',
             'phone.regex' => 'O formato do telefone é inválido. Use (99)9999-9999.',
             'zip_code.regex' => 'O formato do CEP é inválido. Use 99999-999.',
