@@ -38,6 +38,8 @@ class SalonController extends Controller
 
             $newSalon = Salon::create([
                 'name' => $request->name,
+                'cnpj' => $request->cnpj,
+                'cpf' => $request->cpf,
                 'description' => $request->description,
                 'phone' => $request->phone,
                 'street' => $request->street,
