@@ -7,96 +7,89 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## Rotas da API
+# Rotas da API
 
-### Autenticação
+A seguir estão as principais rotas da API, juntamente com seus métodos e controladores correspondentes.
 
-- **Registrar Usuário:**
-  - Método: `POST`
-  - Endpoint: `/api/register`
-  - Controlador: `Auth\RegisteredUserController@store`
+## Autenticação e Usuários
+
+- **Registro de Usuário:**
+  - `POST` `/api/register` - `Auth\RegisteredUserController@store`
 
 - **Login:**
-  - Método: `POST`
-  - Endpoint: `/api/login`
-  - Controlador: `Auth\AuthenticatedSessionController@store`
+  - `POST` `/api/login` - `Auth\AuthenticatedSessionController@store`
 
 - **Logout:**
-  - Método: `POST`
-  - Endpoint: `/api/logout`
-  - Controlador: `Auth\AuthenticatedSessionController@destroy`
+  - `POST` `/api/logout` - `Auth\AuthenticatedSessionController@destroy`
 
-### Gerenciamento de Senha
+- **Usuários:**
+  - `GET|HEAD` `/api/user` - `UserController@index`
+  - `POST` `/api/user` - `UserController@store`
+  - `GET|HEAD` `/api/user/{user}` - `UserController@show`
+  - `PUT|PATCH` `/api/user/{user}` - `UserController@update`
+  - `DELETE` `/api/user/{user}` - `UserController@destroy`
 
-- **Esqueceu a Senha - Enviar E-mail de Redefinição:**
-  - Método: `POST`
-  - Endpoint: `/api/forgot-password`
-  - Controlador: `Auth\PasswordResetLinkController@store`
+## Salões
 
-- **Redefinir Senha - Mostrar Formulário:**
-  - Método: `GET`
-  - Endpoint: `/api/forgot-password`
-  - Controlador: `Auth\NewPasswordController@show`
+- **Listar Salões:**
+  - `GET|HEAD` `/api/salon` - `SalonController@index`
 
-- **Redefinir Senha - Armazenar Nova Senha:**
-  - Método: `POST`
-  - Endpoint: `/api/reset-password`
-  - Controlador: `Auth\NewPasswordController@store`
-
-### Verificação de E-mail
-
-- **Enviar Notificação de Verificação de E-mail:**
-  - Método: `POST`
-  - Endpoint: `/api/email/verification-notification`
-  - Controlador: `Auth\EmailVerificationNotificationController@store`
-
-- **Verificar E-mail:**
-  - Método: `GET`
-  - Endpoint: `/api/verify-email/{id}/{hash}`
-  - Controlador: `Auth\VerifyEmailController`
-
-- **Mostrar Página de E-mail Verificado:**
-  - Método: `GET`
-  - Endpoint: `/api/verified`
-  - Controlador: `Auth\VerifyEmailController@show`
-
-### Salon
+- **Detalhes do Salão:**
+  - `GET|HEAD` `/api/salon/{salon}` - `SalonController@show`
 
 - **Registrar Salão:**
-  - Método: `POST`
-  - Endpoint: `/api/register-salon`
-  - Controlador: `SalonController@store`
+  - `POST` `/api/salon` - `SalonController@store`
 
-### Usuário
+- **Atualizar Salão:**
+  - `PUT|PATCH` `/api/salon/{salon}` - `SalonController@update`
 
-- **Detalhes do Usuário Autenticado:**
-  - Método: `GET`
-  - Endpoint: `/api/user`
+- **Excluir Salão:**
+  - `DELETE` `/api/salon/{salon}` - `SalonController@destroy`
 
----
+## Autenticação e Verificação de E-mail
 
-## Laravel Sanctum
+- **Enviar Notificação de Verificação de E-mail:**
+  - `POST` `/api/email/verification-notification` - `Auth\EmailVerificationNotificationController@store`
+
+- **Verificação de E-mail:**
+  - `GET|HEAD` `/api/verified` - `Auth\VerifyEmailController@show`
+  - `GET|HEAD` `/api/verify-email/{id}/{hash}` - `Auth\VerifyEmailController`
+
+## Senha e Recuperação de Conta
+
+- **Esqueceu a Senha:**
+  - `GET|HEAD` `/api/forgot-password` - `Auth\NewPasswordController@show`
+  - `POST` `/api/forgot-password` - `Auth\PasswordResetLinkController@store`
+
+- **Redefinir Senha:**
+  - `POST` `/api/reset-password` - `Auth\NewPasswordController@store`
+
+## Health Check e Configuração
+
+- **Health Check:**
+  - `GET|HEAD` `/_ignition/health-check` - `Spatie\LaravelIgnition\HealthCheckController`
+
+- **Configuração Atualizar:**
+  - `POST` `/_ignition/update-config` - `Spatie\LaravelIgnition\UpdateConfigController`
+
+## Ignição
+
+- **Executar Solução Ignição:**
+  - `POST` `/_ignition/execute-solution` - `Spatie\LaravelIgnition\ExecuteSolutionController`
+
+## Sanctum e Cookies CSRF
 
 - **Obter Cookie CSRF:**
-  - Método: `GET`
-  - Endpoint: `/sanctum/csrf-cookie`
-  - Controlador: `Laravel\Sanctum\CsrfCookieController@show`
+  - `GET|HEAD` `/sanctum/csrf-cookie` - `Laravel\Sanctum\CsrfCookieController@show`
+
+## Verificação de E-mail
+
+- **Mostrar Página de Verificação de E-mail:**
+  - `GET|HEAD` `/email/verification-notification` - `Auth\EmailVerificationNotificationController@store`
+
+- **Verificar E-mail:**
+  - `GET|HEAD` `/verify-email/{id}/{hash}` - `Auth\VerifyEmailController`
 
 ---
 
-## Laravel Ignition
-
-- **Executar Solução Ignition:**
-  - Método: `POST`
-  - Endpoint: `/_ignition/execute-solution`
-  - Controlador: `Spatie\LaravelIgnition\ExecuteSolutionController`
-
-- **Verificar Status de Saúde Ignition:**
-  - Método: `GET`
-  - Endpoint: `/_ignition/health-check`
-  - Controlador: `Spatie\LaravelIgnition\HealthCheckController`
-
-- **Atualizar Configuração Ignition:**
-  - Método: `POST`
-  - Endpoint: `/_ignition/update-config`
-  - Controlador: `Spatie\LaravelIgnition\UpdateConfigController`
+*Nota: Certifique-se de consultar a documentação completa para obter detalhes sobre parâmetros e resposta esperada.*
